@@ -58,7 +58,6 @@ export class logic {
         player.cells.map((e) => e.x)
       );
     }
-    stats(game.score);
 
     player.intervalcount++;
 

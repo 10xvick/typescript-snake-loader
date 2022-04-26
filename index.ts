@@ -10,9 +10,9 @@ const _logic = new logic();
 const _render = new renderer();
 const _engine = new engine();
 
-const _stats = document.getElementById('stats');
-_stats.innerHTML = 'abc';
+// const _stats = document.getElementById('stats');
+// _stats.innerHTML = 'abc';
 
-export const stats = (e) => {
-  _stats.innerHTML = e;
-};
+// export const stats = (e) => {
+//   _stats.innerHTML = e;
+// };
