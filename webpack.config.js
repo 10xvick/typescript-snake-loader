@@ -23,7 +23,7 @@ module.exports = {
     filename: "bundle.js",
     path: path.resolve(__dirname, "public"),
   },
-  mode: keys.mode.production,
+  mode: keys.mode.development,
   resolve: {
     extensions: [".ts", ".js", ".json", ".css"],
   },
