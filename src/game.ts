@@ -17,7 +17,7 @@ class logics {
   ) {
     console.log(this.ctx);
     this.frameupdate();
-    document.addEventListener('keydown', (e) => {
+    const inputAction = () => {
       if (!gobject.game.over) this.actions.jump();
       else {
         gobject.game.over = false;
@@ -31,7 +31,13 @@ class logics {
         this.actions.updatespec(false);
         this.setupdatespeed();
       }
-    });
+    };
+
+    ['keydown', 'click'].forEach((eventType) =>
+      document.addEventListener(eventType, (e) => {
+        inputAction();
+      })
+    );
   }
 
   setupdatespeed() {
@@ -44,7 +50,9 @@ class logics {
 
   frameupdate() {
     requestAnimationFrame(() => this.frameupdate());
-    //if (this.ctx) {this.render(this.gobject);}
+    if (this.ctx) {
+      this.render(this.gobject);
+    }
   }
 
   actions = {
@@ -135,7 +143,7 @@ class logics {
 
   render({ canvas, player, obstacle }: gameobjects) {
     this.ctx.clearRect(0, 0, canvas.width, canvas.height);
-    function drawplayer(player) {
+    const drawplayer = (player) => {
       player.pixels.forEach((rows, i) => {
         rows.forEach((pixel, j) => {
           pixel &&
@@ -147,7 +155,7 @@ class logics {
             );
         });
       });
-    }
+    };
     drawplayer(player);
     obstacle.container.forEach((e) =>
       this.ctx.fillRect(e.x, e.y, e.width, e.height)
