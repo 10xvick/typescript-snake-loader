@@ -1,22 +1,22 @@
-export const canvas = <HTMLCanvasElement>document.getElementById("gamecanvas");
-export const ctx = canvas.getContext("2d");
-
 export class index {
   gobj: gameobjects;
   logic: logics;
-  constructor() {
-    const canvas = <HTMLCanvasElement>document.getElementById("gamecanvas");
-    const gamespec = <HTMLElement>document.getElementById("spec");
+  constructor(canvas_, HUD, ctx_) {
+    const canvas = canvas_;
+    const gamespec = HUD;
     this.gobj = new gameobjects(canvas, gamespec);
-    this.logic = new logics(this.gobj);
+    this.logic = new logics(this.gobj, ctx_);
   }
 }
 
 class logics {
   interval = null;
-  constructor(private gobject: gameobjects) {
+  constructor(
+    private gobject: gameobjects,
+    private ctx: CanvasRenderingContext2D
+  ) {
     this.frameupdate();
-    document.addEventListener("keydown", (e) => {
+    document.addEventListener('keydown', (e) => {
       if (!gobject.game.over) this.actions.jump();
       else {
         gobject.game.over = false;
@@ -133,12 +133,12 @@ class logics {
   }
 
   render({ canvas, player, obstacle }: gameobjects) {
-    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    this.ctx.clearRect(0, 0, canvas.width, canvas.height);
     function drawplayer(player) {
       player.pixels.forEach((rows, i) => {
         rows.forEach((pixel, j) => {
           pixel &&
-            ctx.fillRect(
+            this.ctx.fillRect(
               player.x + j,
               player.y + i,
               player.width,
@@ -149,7 +149,7 @@ class logics {
     }
     drawplayer(player);
     obstacle.container.forEach((e) =>
-      ctx.fillRect(e.x, e.y, e.width, e.height)
+      this.ctx.fillRect(e.x, e.y, e.width, e.height)
     );
   }
 }
@@ -157,7 +157,7 @@ class logics {
 class gameobjects {
   constructor(canvas, gamespec) {
     this.canvas.element = canvas;
-    this.canvas.context = canvas.getContext("2d");
+    this.canvas.context = canvas.getContext('2d');
     this.game.spec = gamespec;
     this.player.pixels = this.parser.topixels(this.player.pixelcode);
   }
@@ -166,13 +166,13 @@ class gameobjects {
 
   parser = {
     topixels: (str) => {
-      const bin = str.split("").map((e) => e.charCodeAt().toString(2));
+      const bin = str.split('').map((e) => e.charCodeAt().toString(2));
       const maxlength = Math.max(...bin.map((e) => e.length));
       const arr = bin.map((e) => {
         const shift = maxlength - e.length;
         return [
           ...Array(shift).fill(0),
-          ...e.split("").map((f) => parseInt(f)),
+          ...e.split('').map((f) => parseInt(f)),
         ];
       });
       return arr;
@@ -215,7 +215,7 @@ class gameobjects {
     width: 1,
     height: 1,
     pixels: [],
-    pixelcode: "ǾǼǔǼƄϾϾǼĄƆ",
+    pixelcode: 'ǾǼǔǼƄϾϾǼĄƆ',
     actions: {
       jump: {
         limit: 15,
@@ -245,5 +245,3 @@ class gameobjects {
     over: true,
   };
 }
-
-new index();
