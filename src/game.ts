@@ -1,9 +1,8 @@
-import { ctx } from '..';
-
 export class index {
   gobj: gameobjects;
   logic: logics;
   constructor(canvas_, HUD, ctx_) {
+    console.log(ctx_);
     const canvas = canvas_;
     const gamespec = HUD;
     this.gobj = new gameobjects(canvas, gamespec);
@@ -13,8 +12,12 @@ export class index {
 
 class logics {
   interval = null;
-  constructor(private gobject: gameobjects, ctx: CanvasRenderingContext2D) {
+  constructor(
+    private gobject: gameobjects,
+    private ctx: CanvasRenderingContext2D
+  ) {
     this.frameupdate();
+    console.log(this.ctx);
     document.addEventListener('keydown', (e) => {
       if (!gobject.game.over) this.actions.jump();
       else {
